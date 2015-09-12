@@ -7,13 +7,23 @@ var io = require('socket.io')(http);
 var db = monk("localhost/heart");
 var col = db.get("db");
 
-app.get("/",function(req,res){
-  var dataPromise = col.find({},{sort:{$natural:1}});
-  dataPromise.then(function(data){
-    var str = JSON.stringify(data, null, 2);
-    res.send(str);
-  });
+//app.get("/",function(req,res){
+  //var dataPromise = col.find({},{sort:{$natural:1}});
+  //dataPromise.then(function(data){
+    //var str = JSON.stringify(data, null, 2);
+    //res.send(str);
+  //});
+//});
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
 });
+function estatic(name){
+  app.use('/'+name,express.static(name));
+}
+estatic('js');
+estatic('css');
+estatic("bower_components");
+
 app.get("/post",function(req,res){
   //authentication added here
   var bpm = req.query.bpm
@@ -43,7 +53,17 @@ app.get("/drop",function(req,res){
   });
   res.send("");
 });
-var server = app.listen(3000, function () {
+
+
+io.on('connection',function(socket){
+  var dataPromise = col.find({},{sort:{$natural:1}});
+  dataPromise.then(function(data){
+    socket.emit("update",data);
+  });
+});
+
+
+var server = http.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
 
