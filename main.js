@@ -19,6 +19,7 @@ estatic('css');
 estatic("bower_components");
 
 var eventEmitter = new events.EventEmitter();
+eventEmitter.setMaxListeners(100);
 
 
 app.get("/post",function(req,res){
@@ -62,7 +63,8 @@ app.get("/drop",function(req,res){
 io.on('connection',function(socket){
   function create_name_event(name){
     eventEmitter.on(name,function(){
-      var dataPromise = col.find({user:name},{sort:{$natural:1}});
+      var time = new Date(new Date() - (5000 * 60));
+      var dataPromise = col.find({user:name,time:{$gt:time}},{sort:{$natural:1}});
       dataPromise.then(function(data){
         for(var i = 0; i < data.length; i++){
           delete data[i]._id;
@@ -71,8 +73,10 @@ io.on('connection',function(socket){
         socket.emit(name,data);
       });
     });
+    eventEmitter.on("all",function(){
+      eventEmitter.emit(name);
+    });
     socket.on(name,function(){
-      console.log("got "+name);
       eventEmitter.emit(name);
     });
   }
@@ -97,7 +101,9 @@ io.on('connection',function(socket){
   });
 });
 
-
+setInterval(function(){
+  eventEmitter.emit("all");
+},1000)
 var server = http.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
