@@ -1,0 +1,12 @@
+*.swp
+*.swo
+.sass-cache/
+node_modules
+*.vim
+static/icon*
+css/index.css*
+*sigplot*.js
+data.json
+*.rb
+mongo
+*.log*
