@@ -92,10 +92,21 @@ module.exports = function(grunt){
       }
     });
   }
+  grunt.initConfig({
+    run:{
+      options: {},
+      main:{
+        cmd: 'node',
+        args: ["main.js"]
+      }
+    }
+  });
+  grunt.loadNpmTasks('grunt-run');
   grunt.registerTask("mongod_running","Check if mongod is running",if_mongod_running(true,false));
   grunt.registerTask("start_mongod","Starts mongod",if_mongod_running(true,start_mongod));
   grunt.registerTask("stop_mongod","Stops mongod",if_mongod_running(stop_mongod,true));
   //grunt.registerTask("restore","Restores mongodb's data from dump",if_mongod_running(mongorestore,false));
   grunt.registerTask("drop","Removes all captured data",if_mongod_running(drop,false));
+  grunt.registerTask("default", "Runs main.js",["run:main"]);
 
 }
