@@ -1,25 +1,57 @@
 var socket = io();
-//var Data = React.createClass({
-//});
-var User = React.createClass({
+var OldUser = React.createClass({
   render: function(){
     var divs = [];
     for(var i = 0; i < this.state.data.length; i++){
-      var item = this.state.data[i];
-      var date = new Date(item.time);
-      divs.push(<div key={i}>{date.toString()} {item.bpm}</div>);
+      var data = this.state.data[i];
+      var date = new Date(data.time);
+      divs.push(<div key={i}>{date.toString()}: {data.bpm}</div>);
     }
     return (<div>
       <div>{this.props.name}:</div>
-          <div>{divs}</div>
+        <div>{divs}</div>
         </div>);
   },
-  componentWillMount: function(){
-    var self = this;
-    socket.on(self.props.name,function(data){
-      self.setState({data:data});
-    });
-    socket.emit(self.props.name);
+  componentDidMount: function(){
+    socket.on(this.props.name,function(data){
+      this.setState({data:data});
+    }.bind(this));
+    socket.emit(this.props.name);
+  },
+  getInitialState: function(){
+    return {data:[]};
+  }
+});
+var User = React.createClass({
+  render: function(){
+    return (<div>
+      <div>{this.props.name}:</div>
+      <div className="graph" ref="canvas"></div>
+        </div>);
+  },
+  componentDidMount: function(){
+    socket.on(this.props.name,function(data){
+      var ctx = React.findDOMNode(this.refs.canvas);
+      var x = [];
+      var y = [];
+      for(var i = 0; i < data.length; i++){
+        x.push(data[i].time);
+        y.push(data[i].bpm);
+      }
+      var chart = c3.generate({
+        bindto: ctx,
+        data: {
+          x: 'x',
+          columns: [x,y]
+        }
+      });
+    }.bind(this));
+    console.log(this.props);
+    socket.emit(this.props.name);
+
+  },
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps);
   },
   getInitialState: function(){
     return {data:[]};
@@ -29,7 +61,9 @@ var Root = React.createClass({
   render: function(){
     var divList = []
     for(var i = 0; i < this.state.names.length; i++){
-      divList.push(<User name={this.state.names[i]} key={i} />);
+      var name = this.state.names[i];
+      console.log(name);
+      divList.push(<OldUser name={name} key={i}/>);
     }
     return <div>{divList}</div>;
   },

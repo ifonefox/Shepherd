@@ -8,7 +8,7 @@ var events = require('events');
 var db = monk("localhost/heart");
 var col = db.get("db");
 
-app.get('/', function (req, res) {
+app.get('/admin', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 function estatic(name){
@@ -67,12 +67,12 @@ io.on('connection',function(socket){
         for(var i = 0; i < data.length; i++){
           delete data[i]._id;
           delete data[i].user;
-          //data[i].time = data[i].time.getTime();
         }
         socket.emit(name,data);
       });
     });
     socket.on(name,function(){
+      console.log("got "+name);
       eventEmitter.emit(name);
     });
   }
@@ -91,6 +91,9 @@ io.on('connection',function(socket){
       create_name_event(data[i]);
     }
     socket.emit("names",data);
+  });
+  socket.on("disconnect",function(){
+    eventEmitter.removeAllListeners();
   });
 });
 
