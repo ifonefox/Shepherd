@@ -1,14 +1,43 @@
+var socket = io();
+var User = React.createClass({
+  render: function(){
+    return <div>{this.props.name}: {this.state.data}</div>;
+  },
+  componentWillMount: function(){
+    var self = this;
+    socket.on(self.props.name,function(data){
+      console.log(self.props.name, data);
+      self.setState({data:data});
+    });
+    console.log("emitting "+this.props.name);
+    socket.emit(self.props.name);
+  },
+  getInitialState: function(){
+    return {data:[]};
+  }
+});
 var Root = React.createClass({
   render: function(){
-    var data = JSON.stringify(this.props.data, null, 2);
-    return <div>{data}</div>;
+    var divList = []
+    for(var i = 0; i < this.state.names.length; i++){
+      divList.push(<User name={this.state.names[i]} key={i} />);
+    }
+    return <div>{divList}</div>;
+  },
+  componentWillMount: function(){
+    var self = this;
+    socket.on("names",function(names){
+      self.setState({names:names});
+    });
+  },
+  getInitialState: function(){
+    return ({names:[]});
   }
 });
 
 
 window.onload = function(){
-  var socket = io();
-  socket.on("update",function(data){
-    React.render(<Root data={data}/>, document.body);
-  });
+  //socket.on("names",function(data){
+  React.render(<Root />, document.body);
+  //});
 }

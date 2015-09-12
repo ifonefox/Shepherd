@@ -3,17 +3,11 @@ var app = express();
 var monk = require('monk');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var events = require('events');
 
 var db = monk("localhost/heart");
 var col = db.get("db");
 
-//app.get("/",function(req,res){
-  //var dataPromise = col.find({},{sort:{$natural:1}});
-  //dataPromise.then(function(data){
-    //var str = JSON.stringify(data, null, 2);
-    //res.send(str);
-  //});
-//});
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
@@ -24,14 +18,24 @@ estatic('js');
 estatic('css');
 estatic("bower_components");
 
+var eventEmitter = new events.EventEmitter();
+
+
 app.get("/post",function(req,res){
   //authentication added here
   var bpm = req.query.bpm
   var user = req.query.user || "test"
   var time = new Date();
-  var data = {time:time,bpm:bpm,user:user};
-  col.insert(data);
-  res.send(data);
+  var rawdata = {time:time,bpm:bpm,user:user};
+  var dataPromise = col.find({user:user});
+  dataPromise.then(function(data){
+    col.insert(rawdata);
+    if(data.length === 0){
+      eventEmitter.emit("new_name",user);
+    } 
+    eventEmitter.emit(user);
+  });
+  res.send(rawdata);
 });
 app.get("/drop",function(req,res){
   db.driver.open(function(_,db2){
@@ -56,9 +60,34 @@ app.get("/drop",function(req,res){
 
 
 io.on('connection',function(socket){
-  var dataPromise = col.find({},{sort:{$natural:1}});
+  function create_name_event(name){
+    eventEmitter.on(name,function(){
+      console.log("creating event "+name);
+      var dataPromise = col.find({user:name},{sort:{$natural:1}});
+      dataPromise.then(function(data){
+        socket.emit(name,data);
+      });
+    });
+    socket.on(name,function(){
+      console.log("emiting "+name);
+      eventEmitter.emit(name);
+    });
+  }
+  eventEmitter.on("new_name",function(name){
+    create_name_event(name);
+    var dataPromise = col.distinct("user",{});
+    dataPromise.then(function(data){
+      data = data.sort();
+      socket.emit("names",data);
+    });
+  });
+  var dataPromise = col.distinct("user",{});
   dataPromise.then(function(data){
-    socket.emit("update",data);
+    data = data.sort();
+    for(var i = 0; i < data.length; i++){
+      create_name_event(data[i]);
+    }
+    socket.emit("names",data);
   });
 });
 

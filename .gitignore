@@ -11,3 +11,5 @@ data.json
 mongo
 *.log*
 bower_components/
+js/index.js
+js/index.js.map
