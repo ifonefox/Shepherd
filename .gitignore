@@ -10,3 +10,4 @@ data.json
 *.rb
 mongo
 *.log*
+bower_components/
