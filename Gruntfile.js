@@ -99,9 +99,49 @@ module.exports = function(grunt){
         cmd: 'node',
         args: ["main.js"]
       }
+    },
+    sass:{
+      dist:{
+        files:{
+          "css/index.css":"css/index.scss"
+        }
+      }
+    },
+    babel: {
+      options:{
+        sourceMap:true
+      },
+      dist: {
+        files: {
+          './js/index.js': './js/index.jsx',
+        }
+      }
+    },
+    watch: {
+      jsx:{
+        files: ['js/index.jsx'],
+        tasks: ['babel']
+      },
+      sass:{
+        files:['css/index.scss'],
+        tasks:['sass']
+      }
+    },
+    concurrent: {
+      options:{
+        logConcurrentOutput: true
+      },
+      watch:{
+        tasks: ["watch:sass","watch:jsx"]
+      }
     }
   });
   grunt.loadNpmTasks('grunt-run');
+  grunt.loadNpmTasks("grunt-babel");
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-sass');
+  grunt.registerTask('sass-jsx', 'Watch:sass and Watch:jsx',['babel','sass','concurrent']);
   grunt.registerTask("mongod_running","Check if mongod is running",if_mongod_running(true,false));
   grunt.registerTask("start_mongod","Starts mongod",if_mongod_running(true,start_mongod));
   grunt.registerTask("stop_mongod","Stops mongod",if_mongod_running(stop_mongod,true));
