@@ -62,14 +62,17 @@ app.get("/drop",function(req,res){
 io.on('connection',function(socket){
   function create_name_event(name){
     eventEmitter.on(name,function(){
-      console.log("creating event "+name);
       var dataPromise = col.find({user:name},{sort:{$natural:1}});
       dataPromise.then(function(data){
+        for(var i = 0; i < data.length; i++){
+          delete data[i]._id;
+          delete data[i].user;
+          //data[i].time = data[i].time.getTime();
+        }
         socket.emit(name,data);
       });
     });
     socket.on(name,function(){
-      console.log("emiting "+name);
       eventEmitter.emit(name);
     });
   }
