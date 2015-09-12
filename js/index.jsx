@@ -28,7 +28,11 @@ var User = React.createClass({
       //<div>{this.props.name}:</div>
       //<div className="graph" ref="canvas"></div>
         //</div>);
-    return (<div className="card">
+    var className="card";
+    if(this.state.red){
+      className="card red";
+    }
+    return (<div className={className} ref="card">
       <div className="card-img-top graph" ref="canvas"></div>
       <div className="card-block">
         <h4 className="card-title name">{this.props.name}</h4>
@@ -56,6 +60,9 @@ var User = React.createClass({
       legend:{
         //hide:true
         show:false
+      },
+      color:{
+        pattern:["#888888"]
       },
       data: {
         x: 'x',
@@ -92,7 +99,7 @@ var User = React.createClass({
           this.newest.l !== data.length){
         this.newest = {};
         this.newest.t = data[data.length-1].time;
-        this.newest.l = data.length
+        this.newest.l = data.length;
         if(data.length !== 0){
           var bpm = data[data.length-1].bpm;
           var node = React.findDOMNode(this.refs.bpm)
@@ -102,12 +109,17 @@ var User = React.createClass({
         }
         var x = ['x'];
         var y = ['y'];
+        var red = false;
         for(var i = 0; i < data.length; i++){
           var date = new Date(data[i].time);
           //date = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
           x.push(date);
           y.push(data[i].bpm);
+          if(data[i].bpm >= 90){
+            red = true;
+          }
         }
+        this.setState({red:red});
         this.chart.load({
           columns:[x,y]
         });
@@ -121,7 +133,7 @@ var User = React.createClass({
 
   },
   getInitialState: function(){
-    return {data:[]};
+    return {data:[],red:false};
   }
 });
 var Root = React.createClass({

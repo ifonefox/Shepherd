@@ -2,10 +2,24 @@
   background-color:green;
 }
 .card{
+  &.red{
+    .c3 .c3-axis-x path, .c3 .c3-axis-x line {
+      stroke: white;
+    }
+    .c3 .c3-axis-y path, .c3 .c3-axis-y line {
+      stroke: white;
+    }
+    tspan {
+      stroke: white;
+    }
+    background-color: #d9534f;
+  }
+  background-color:white;
   width: 20em;
 }
 #root{
   padding: 1.5rem;
+  background-color:lightgray;
 }
 .card-block{
   h4{
