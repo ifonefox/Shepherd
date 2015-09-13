@@ -30,11 +30,13 @@ eventEmitter.setMaxListeners(100);
 
 app.get("/post",function(req,res){
   //authentication added here
-  console.log("Got post post request: ");
-  console.log(req.query);
   var bpm = req.query.bpm
   if(bpm !== "---"){
     var user = req.query.user || "You"
+    if (user==="You"){
+      console.log("Got post post request: ");
+      console.log(req.query);
+    }
     var time = new Date();
     var rawdata = {time:time,bpm:bpm,user:user};
     var dataPromise = col.find({user:user});
