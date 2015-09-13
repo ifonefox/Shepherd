@@ -8,8 +8,14 @@ var events = require('events');
 var db = monk("localhost/heart");
 var col = db.get("db");
 
-app.get('/admin', function (req, res) {
+app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
+});
+app.get('/admin', function (req, res) {
+  res.sendFile(__dirname + '/admin.html');
+});
+app.get('/about', function (req, res) {
+  res.sendFile(__dirname + '/about.html');
 });
 function estatic(name){
   app.use('/'+name,express.static(name));
@@ -56,7 +62,7 @@ app.get("/drop",function(req,res){
       });
     }
   });
-  res.send("");
+  res.redirect("/admin");
 });
 
 

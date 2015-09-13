@@ -2,24 +2,56 @@
 <html>
   <head>
 		<link rel="stylesheet" type="text/css" href="/css/index.css">
-		<link rel="stylesheet" type="text/css" href="/bower_components/c3/c3.css">
 		<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 		<!--<link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">-->
-    <script src="/bower_components/d3/d3.min.js"></script>
-    <script src="/bower_components/c3/c3.min.js"></script>
-    <script src="/bower_components/react/react.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/index.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-dark navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand">Shepherd</a>
+        <a href="#" class="navbar-brand">Shepherd</a>
+        <ul class="nav navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">Admin</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/drop">Reset Database</a>
+          </li>
+          <!--<li class="nav-item">-->
+            <!--<a class="nav-link" href="/about">About</a>-->
+          <!--</li>-->
+        </ul>
+    </nav>
+    <div id="root" class="container">
+      <div class="jumbotron">
+        <div class="container">
+          <h1>Help your doctor help you</h1>
+          <p>Shepherd connects you directly to your doctor, so that the doctor can instantly see how your heart is doing. The doctor has instant access to the heart rates of all of their patients, so you know that you're health is always being monitored. With your concent and the installation of an app, your data is sent to the cloud so that your doctor can see a graph of your bpm from the last five minutes. It also detects if your heartbeat is faster than normal, and lets the doctor know. </p>
         </div>
       </div>
-    </nav>
-    <div id="root">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card card-block">
+              <!--<h1 class="card-title"></h1>-->
+              <p class="card-text">Whenever someone's heart rate is abnormally fast, the interface changes to show the doctor the issue. Each people not only has their current BPM, but the doctor also sees a graph of your heart rate for the past five minutes. This allows the doctor to know if this is a single false positive, or the begining of a problem.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-block">
+              <!--<h1 class="card-title"></h1>-->
+              <p class="card-text">With Sheperd, no one person takes up the entire view. Your doctor sees the heart rates of all patients at the same time, so you know that your doctor has an eye on your health.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-block">
+              <!--<h1 class="card-title">Placeholder</h1>-->
+              <p class="card-text">The Apple Watch allows for your heartbeat data to be instantly sent over to the doctor. You don't need to worry about connecting a device to you computer, only to have all your data deleated. Since your watch is paired to your iPhone, you always have an internet connection. Shepherd takes advantage of this, and sends the data to your doctor the instant after it is mesured.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
