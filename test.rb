@@ -1,6 +1,6 @@
 names = ["Emma", "Noah", "Olivia", "Liam", "Alex"]
 $rand = Random.new
-$url = "sbrody.org"
+$url = "localhost"
 class Heart
   attr_writer :countdown
   attr_reader :thread
