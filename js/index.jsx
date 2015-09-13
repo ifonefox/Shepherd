@@ -108,7 +108,7 @@ var User = React.createClass({
           }
         }
         var x = ['x'];
-        var y = ['y'];
+        var y = ['bpm'];
         var red = false;
         for(var i = 0; i < data.length; i++){
           var date = new Date(data[i].time);
