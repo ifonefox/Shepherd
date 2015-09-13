@@ -7,7 +7,6 @@ static/icon*
 css/index.css*
 *sigplot*.js
 data.json
-*.rb
 mongo
 *.log*
 bower_components/
