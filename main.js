@@ -94,6 +94,11 @@ io.on('connection',function(socket){
     for(var i = 0; i < data.length; i++){
       create_name_event(data[i]);
     }
+    var index = data.indexOf("You");
+    if(index != -1){
+      data.splice(index,1);
+      data = ["You"].concat(data);
+    }
     socket.emit("names",data);
   });
   socket.on("disconnect",function(){
