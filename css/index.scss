@@ -3,6 +3,8 @@
 }
 .card{
   &.red{
+    color:white;
+    border-color:black;
     .c3 .c3-axis-x path, .c3 .c3-axis-x line {
       stroke: white;
     }
@@ -12,7 +14,8 @@
     tspan {
       stroke: white;
     }
-    background-color: #d9534f;
+    /*background-color: #d9534f;*/
+    background-color:red;
   }
   background-color:white;
   width: 20em;

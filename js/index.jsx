@@ -22,6 +22,21 @@ var OldUser = React.createClass({
     return {data:[]};
   }
 });
+function do_I_update(data,current){
+  if(typeof(current.l) === "undefined"){
+    return true;
+  }else if(typeof(current.t) === "undefined"){
+    return true;
+  }else if(data.length !== current.l){
+    return true;
+  } else if (data.length === 0){
+    return false;
+  }else if(data[data.length-1].time !== current.t){
+    return true;
+  } else {
+    return false;
+  }
+}
 var User = React.createClass({
   render: function(){
     //return (<div>
@@ -62,7 +77,8 @@ var User = React.createClass({
         show:false
       },
       color:{
-        pattern:["#888888"]
+        //pattern:["#888888"]
+        pattern:["#000000"]
       },
       data: {
         x: 'x',
@@ -95,12 +111,12 @@ var User = React.createClass({
       }
     });
     socket.on(this.props.name,function(data){
-      if(typeof(this.newest) === "undefined" || this.newest.t !== data[data.length-1].time ||
-          this.newest.l !== data.length){
-        this.newest = {};
-        this.newest.t = data[data.length-1].time;
-        this.newest.l = data.length;
+      if(typeof(this.newest) === "undefined" ||
+          do_I_update(data,this.newest)){
+        this.newest = {t:0,l:0};
         if(data.length !== 0){
+          this.newest.t = data[data.length-1].time;
+          this.newest.l = data.length;
           var bpm = data[data.length-1].bpm;
           var node = React.findDOMNode(this.refs.bpm)
           if(node !== null){
