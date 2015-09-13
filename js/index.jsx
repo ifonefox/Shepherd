@@ -43,7 +43,7 @@ var User = React.createClass({
   componentDidMount: function(){
     var ctx = React.findDOMNode(this.refs.canvas);
     var x = ['x'];
-    var y = ['y'];
+    var y = ['bpm'];
     var pad = 20;
     this.chart = c3.generate({
       bindto: ctx,
