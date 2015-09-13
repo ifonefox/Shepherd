@@ -51,14 +51,14 @@ var User = React.createClass({
       <div className="card-img-top graph" ref="canvas"></div>
       <div className="card-block">
         <h4 className="card-title name">{this.props.name}</h4>
-        <h5 className="card-title bpm" ref="bpm">~~ bpm</h5>
+        <h5 className="card-title bpm" ref="bpm">~~ BPM</h5>
       </div>
     </div>);
   },
   componentDidMount: function(){
     var ctx = React.findDOMNode(this.refs.canvas);
     var x = ['x'];
-    var y = ['bpm'];
+    var y = ['BPM'];
     var pad = 20;
     this.chart = c3.generate({
       bindto: ctx,
@@ -120,11 +120,11 @@ var User = React.createClass({
           var bpm = data[data.length-1].bpm;
           var node = React.findDOMNode(this.refs.bpm)
           if(node !== null){
-            node.textContent=bpm.toString() + " bpm";
+            node.textContent=bpm.toString() + " BPM";
           }
         }
         var x = ['x'];
-        var y = ['bpm'];
+        var y = ['BPM'];
         var red = false;
         for(var i = 0; i < data.length; i++){
           var date = new Date(data[i].time);
