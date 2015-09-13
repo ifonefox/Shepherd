@@ -1,3 +1,3 @@
-mkdir /mongo
-mkdir /mongo/db
-mkdir /mongo/logs
+mkdir mongo
+mkdir mongo/db
+mkdir mongo/logs
