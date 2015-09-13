@@ -30,19 +30,25 @@ eventEmitter.setMaxListeners(100);
 
 app.get("/post",function(req,res){
   //authentication added here
+  console.log("Got post post request: ");
+  console.log(req.query);
   var bpm = req.query.bpm
-  var user = req.query.user || "You"
-  var time = new Date();
-  var rawdata = {time:time,bpm:bpm,user:user};
-  var dataPromise = col.find({user:user});
-  dataPromise.then(function(data){
-    col.insert(rawdata);
-    if(data.length === 0){
-      eventEmitter.emit("new_name",user);
-    } 
-    eventEmitter.emit(user);
-  });
-  res.send(rawdata);
+  if(bpm !== "---"){
+    var user = req.query.user || "You"
+    var time = new Date();
+    var rawdata = {time:time,bpm:bpm,user:user};
+    var dataPromise = col.find({user:user});
+    dataPromise.then(function(data){
+      col.insert(rawdata);
+      if(data.length === 0){
+        eventEmitter.emit("new_name",user);
+      } 
+      eventEmitter.emit(user);
+    });
+    res.send(rawdata);
+  } else {
+    res.send("");
+  }
 });
 app.get("/drop",function(req,res){
   db.driver.open(function(_,db2){
