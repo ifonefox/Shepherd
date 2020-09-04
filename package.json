@@ -16,7 +16,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-run": "^0.4.0",
     "grunt-sass": "^1.0.0",
-    "mongodb": "^2.0.42",
+    "mongodb": "^3.6.1",
     "monk": "^1.0.1",
     "socket.io": "^1.3.6"
   }
